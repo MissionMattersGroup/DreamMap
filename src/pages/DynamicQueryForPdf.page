@@ -1,0 +1,57 @@
+<apex:page controller="DynamicQueryForDreamMap" renderAs="Pdf" >
+       
+
+    <apex:form style="border:10px double #990033;">
+        <apex:pageMessages ></apex:pageMessages>
+        <apex:pageBlock tabStyle="Account">
+            <apex:outputPanel id="goalDetails" >
+                <apex:pageBlockSection title="Goal Details" rendered="{!showBtn}">
+                    
+                </apex:pageBlockSection>
+                <apex:outputPanel id="showGoalTableId" rendered="{!AllRecords.size > 0}">
+                    <table class="tableClass" id="tableForGoalObjectives" style ="align-content: center!important;">
+                        <tr style="background-color: rgb(181, 181, 181);align-content: center!important;">
+                            <apex:repeat value="{!accessibleFieldsForGoals}" var="fieldsForGoal">
+                                <th>{!$ObjectType[objGoalName].fields[fieldsForGoal].Label}</th>
+                            </apex:repeat>
+                        </tr>
+                        <apex:repeat value="{!AllRecords}" var="rec">
+                            <tr style="font-size: 13px;background-color: rgb(207, 215, 228);align-content: center;">
+                                <apex:repeat value="{!accessibleFieldsForGoals}" var="fieldsForGoal"> 
+                                    <td>{!rec.sObj[fieldsForGoal]}</td>
+                                </apex:repeat>
+                            </tr>
+                            <tr style="background-color: rgb(200, 200, 200);font-size: 11px;align-content: center;" >
+                                <apex:repeat value="{!accessibleFieldsForObjectives}" var="fieldsForObjective" >
+                                    <th>{!$ObjectType[objObjectiveName].fields[fieldsForObjective].Label}</th>
+                                </apex:repeat>
+                            </tr>
+                            <apex:repeat value="{!rec.children}" var="child">
+                                <tr style="font-size: 11px;align-content: center;">
+                                    <apex:repeat value="{!accessibleFieldsForObjectives}" var="fieldsForObjective">
+                                        <td>{!child.sObj[fieldsForObjective]}</td>
+                                    </apex:repeat>
+                                </tr>
+                            </apex:repeat>
+                        </apex:repeat>
+                    </table>
+               </apex:outputPanel>
+
+                <apex:outputPanel id="btnForObjective" rendered="{!showBtn}">
+                    <apex:commandButton action="{!addGoalsAndObjectives}" value="Add Goals & Objectives" id="goalObjectiveButton" />
+                 </apex:outputPanel>
+            </apex:outputPanel>
+            <apex:outputPanel id="popupForObjective">
+                <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                    <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
+                    <p>{!$Label.DQFMPopupMsg}</p>
+                    <br/><br/><br/>
+                    <apex:commandButton action="{!addGoalsAndObjectives}" value="Add Goals & Objectives" id="goalObjectiveButtonOnPopup" style="margin-left: 330px; width: 133px; border-left-width: 1px;height: 23px;margin-bottom: 1px;border-bottom-width: 1px;padding-bottom: 6px;"  />
+                    
+                </apex:outputPanel>
+            </apex:outputPanel>
+            
+        </apex:pageblock>
+
+    </apex:form> 
+</apex:page>
